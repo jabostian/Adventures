@@ -6,12 +6,20 @@ so my experience is from within an *Anaconda* environment.
 Tensorflow with GPU support requires a manual build.  The build itself takes about 35 minutes.  CPU pegged.  About 4 GB of memory at high water mark.  Verbose output - info & warning msgs.
 
 ### System Characteristics:
-- Ubuntu Gnome 16.04
-- Anaconda and Python 3.6
+- Ubuntu Gnome 18.04
+- Anaconda and Python 3.6.5
 - 3.5 gHZ Intel Core I5
 - 64 GB memory
 - Nvidia GTX-1070 graphics card
 - 500 GB SSD
+
+### Building with Nvidia GPU support
+Started at the Ubuntu install page https://www.tensorflow.org/install/install_linux
+
+
+
+
+
 
 After the installation, the versions of NVIDIA and TensorFlow packages are:
 - CUDA Toolkit 9.1
