@@ -3,18 +3,35 @@ This is my adventure with installing **TensorFlow** with GPU capabilities.  It's
 environment, but is still a complex one.  I prefer to use *Anaconda* for configurations like this,
 so my experience is from within an *Anaconda* environment.
 
-Tensorflow with GPU support requires a manual build.  The build itself takes about 35 minutes.  CPU pegged.  About 4 GB of memory at high water mark.  Verbose output - info & warning msgs.
 
 ### System Characteristics:
-- Ubuntu Gnome 18.04
-- Anaconda and Python 3.6.5
 - 3.5 gHZ Intel Core I5
 - 64 GB memory
 - Nvidia GTX-1070 graphics card
 - 500 GB SSD
+- Ubuntu Gnome 18.04
+- Anaconda and Python 3.6.5
 
 ### Building with Nvidia GPU support
-Started at the Ubuntu install page https://www.tensorflow.org/install/install_linux
+Build all of TensorFlow from scratch with GPU support.  Start at
+https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes.
+CPU pegged.  About 4 GB of memory at high water mark.  Verbose output - info & warning msgs.
+
+- Set up a conda environment (tf_gpu) to work from with just Python in it.  Work from This
+  environment so that we can do an A/B comparison between a GPU build and a vanilla install
+  for CPU.
+- Install all of the Nvidia assets required at the latest levels.  Some of these packages
+  were created before Ubuntu 18.04 became available, so the install packages are not yet
+  available.  Install from the runfile instead of a ```.deb``` via ```apt```.
+   - _**Cuda Toolkit 9.2**_  Found these instructions: https://linoxide.com/linux-how-to/install-cuda-ubuntu/
+      - Already had build-essential installed, so gcc and linux headers are available
+      - ```sudo apt install nvidia-384```
+      - Get the latest install runfile from https://developer.nvidia.com/cuda-downloads.
+        I got ```cuda_9.2.148_396.37_linux.run```
+      - ```chmod +x cuda_9.2.148_396.37_linux.run```
+      - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --driver```
+      - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --toolkit --override```
+
 
 
 
