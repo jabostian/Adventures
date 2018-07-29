@@ -1,7 +1,5 @@
 ### Intro
-This is my adventure with installing **TensorFlow** with GPU capabilities.  It's a well documented
-environment, but is still a complex one.  I prefer to use *Anaconda* for configurations like this,
-so my experience is from within an *Anaconda* environment.
+This is my adventure with installing **TensorFlow** with GPU capabilities.  It's a well documented environment, but is still a complex one.  I prefer to use *Anaconda* for configurations like this, so my experience is from within an *Anaconda* environment.
 
 ### System Characteristics:
 - 3.5 gHZ Intel Core I5
@@ -11,14 +9,13 @@ so my experience is from within an *Anaconda* environment.
 - Ubuntu Gnome 18.04
 - Anaconda and Python 3.6.5
 
-### Building with Nvidia GPU support
-Build all of TensorFlow from scratch with GPU support.  Start at
-https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes
-with the CPU pegged.  About 4 GB of memory used at the high water mark.
+### Install the NVIDIA Drivers, Libraries, and Samples
+At the time I did this, there were no Debian packages created for 18.04, so this install
+is from runfiles and archives.  I have basically followed the instructions at
+https://www.tensorflow.org/install/install_linux#NVIDIARequirements.
 
-At the time I did this, there were no debian packages created for 18.04, so this install
-is from runfiles and archives.  I was able to find others who blazed this trail before
-me, and found this blog entry to be helpful:
+I was able to find others who blazed this trail before me, and found this blog entry
+to be helpful:
 https://medium.com/@taylordenouden/installing-tensorflow-gpu-on-ubuntu-18-04-89a142325138
 
 - Set up a conda environment (tf_gpu) to work from with just Python in it.  Work from This
@@ -35,6 +32,7 @@ https://medium.com/@taylordenouden/installing-tensorflow-gpu-on-ubuntu-18-04-89a
       - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --driver```
       - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --toolkit --override```
       - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --samples```
+      - ```sudo chown <user_id>:<user_group> -R $HOME/NVIDIA_CUDA-9.2_Samples```
       - Make the following environmental updates:
          - Add ```/usr/local/cuda-9.2/bin``` to ```PATH``` in ```~/.bashrc```
          - Add ```/usr/local/cuda-9.2/lib64``` to ```LD_LIBRARY_PATH``` in ```~/.bashrc```
@@ -61,8 +59,7 @@ this:
 - ```sudo apt-get install cuda-command-line-tools```
 
 but since I've installed from tar files for 18.04, this is the command that works:
-
-```sudo apt-get install libcupti-dev```
+- ```sudo apt-get install libcupti-dev```
 
 NVIDIA setup is now complete.  I have a section in my ```.bashrc``` that looks like
 this now:
@@ -73,70 +70,47 @@ export PATH=$CUDA_HOME/bin:$PATH
 export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 ```
 
+All of the NVIDIA packages that TensorFlow depends on should now be installed.
 Log off and back on, and re-enter the ```tf_gpu``` conda environment to get
-everything set up properly.
+everything set up properly.  
+
+Try out some of the NVIDIA samples to verify things before moving on with TensorFlow.
+The samples were installed to $HOME/NVIDIA_CUDA-9.2_Samples.  Follow the sample build
+instructions at https://docs.nvidia.com/cuda/cuda-samples/index.html#building-samples.
+
+- ```cd $HOME/NVIDIA_CUDA-9.2_Samples```
+- ```make```
+
+This builds a lot of stuff in the samples directory.  If everything builds and
+some of the samples run without trouble, then it's time for TensorFlow.
+
+-----
+
+### Building TensorFlow from Sources with GPU Support
+Build all of TensorFlow from scratch with GPU support.  Start at
+https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes
+with the CPU pegged.  About 4 GB of memory used at the high water mark.
 
 
 -----
 
-### Nvidia Stuff to Install
-The order of steps here is from the TensorFlow for GPU installation instructions.  Here are the
-components that TensorFlow pre-reqs:
-- CUDA toolkit
-- NVIDIA drivers for the CUDA toolkit
-- NVIDIA Deep Neural Network library (cuDNN)
-- NVIDIA CUDA Profiler Tools developer files (libcputi-dev)
+#### Useful Nvidia (and related) Commands
+- Look for an Nvidia PCI-attached card
+   - ```lspci | grep -i nvidia```
+- Nvidia systems management interface
+   - ```nvidia-smi ...```
+- Display the Nvidia driver version
+   - ```cat /proc/driver/nvidia/version```
+- Enhanced system info from uname
+   - ```uname -m && cat /etc/*release```
+- Show installed signing keys
+   - ```sudo apt-key list ```
 
-#### Install the CUDA toolkit and Drivers
-Installation instructions:
-- http://docs.nvidia.com/cuda/cuda-installation-guide-linux/
-- Make sure to do all of the PATH and LD_LIBRARY_PATH setup suggested.  The doc is good, but a little
-vague about whether LD_LIBRARY_PATH is needed for all environments, so it doesn't hurt to set it.
-- Make sure to include the install of the CUDA drivers.
-   - ```sudo apt install cuda-drivers```
-- Have the system start up the NVIDIA persistsnce daemon on startup:
-   - ```sudo systemctl enable /lib/systemd/system/nvidia-persistenced.service```<br>
-   To check the status of the daemon:
-   - ```systemctl status nvidia-persistence```<br>
-   *Note: I don't know where the service file for this came from.  I may have created it
-   myself for the prior CUDA toolkit install.  If I did, and this didn't come with the package,
-   here is the text of it:*
-
-   ```
-   [Unit]
-   Description=NVIDIA Persistence Daemon
-   Wants=syslog.target
-
-   [Service]
-   Type=forking
-   ExecStart=/usr/bin/nvidia-persistenced --user nvidia-persistenced --no-persistence-mode --verbose
-   ExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced
-   ```
-- Install all of the writable samples
-- Add the samples binary directory to $PATH
-   - ```export PATH=$PATH:$HOME/Gondor/NVIDIA/CUDA/NVIDIA_CUDA-9.1_Samples/bin/x86_64/linux/release```
-- Compile the examples and run the device query tool, just to smoke test things
-   - ```deviceQuery```
-- Run the bandwidthTest to see what memory transfer speeds are
-   - ```bandwidthTest```
-
-#### Install the Deep Neural Network library (cuDNN)
-We will install from debs.  No need to download the cudnn tar file.  The installation instructions
-are downloaded in a PDF.  From there:
-- Download the graphics drivers runfile
-- At the download page, the *Additional Information* tab says to run the runfile:
-   - ```sudo sh ./NVIDIA-Linux-x86_64-384.111.run```<br>
-   I keep getting a message that the install process can't complete because nvidia-drm is in use.
-   Tried stopping *nvidia-persistenced* and unloading any kernel module associated with nvidia,
-   but nothing worked. Found that I could upgrade like this:
-   - ```sudo add-apt-repository ppa:graphics-drivers/ppa```
-   - ```sudo apt update```
-   - ```sudo apt upgrade```
-   - ```shutdown -r now```
-- Install the cuDNN deb packages and verify as per the instructions.
-
-#### Install the NVIDIA CUDA Profile Tools interface
-   - ```sudo apt-get install libcupti-dev```
+#### Other NVIDIA stuff to Install   
+- Nsight Eclipse IDE:
+   - https://developer.nvidia.com/nsight-eclipse-edition
+- NVIDIA Visual Profiler
+   - https://developer.nvidia.com/nvidia-visual-profiler
 
 -----
 
@@ -325,25 +299,6 @@ After starting a new terminal to pick up the environmental changes, I still keep
 
 
 
-
-
-#### Useful Nvidia (and related) Commands
-- Look for an Nvidia PCI-attached card
-   - ```lspci | grep -i nvidia```
-- Nvidia systems management interface
-   - ```nvidia-smi ...```
-- Display the Nvidia driver version
-   - ```cat /proc/driver/nvidia/version```
-- Enhanced system info from uname
-   - ```uname -m && cat /etc/*release```
-- Show installed signing keys
-   - ```sudo apt-key list ```
-
-#### Other NVIDIA stuff to Install   
-- Nsight Eclipse IDE:
-   - https://developer.nvidia.com/nsight-eclipse-edition
-- NVIDIA Visual Profiler
-   - https://developer.nvidia.com/nvidia-visual-profiler
 
 
 ------------
