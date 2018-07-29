@@ -8,6 +8,7 @@ This is my adventure with installing **TensorFlow** with GPU capabilities.  It's
 - 500 GB SSD
 - Ubuntu Gnome 18.04
 - Anaconda and Python 3.6.5
+- Packages build-essential, linux-headers, zip, and unzip installed
 
 ### Install the NVIDIA Drivers, Libraries, and Samples
 At the time I did this, there were no Debian packages created for 18.04, so this install
@@ -90,6 +91,28 @@ some of the samples run without trouble, then it's time for TensorFlow.
 Build all of TensorFlow from scratch with GPU support.  Start at
 https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes
 with the CPU pegged.  About 4 GB of memory used at the high water mark.
+
+- Get all of the TensorFlow Source
+   - ```git clone https://github.com/tensorflow/tensorflow```
+- Install bazel to build the code.  Again, we have to build this from source,
+  since the packages for 18.04 are not yet ready.  Work from the instructions at
+  https://docs.bazel.build/versions/master/install-compile-source.html
+   - ```sudo apt install openjdk-8-jdk```
+   - Download the bazel sources zip file from https://github.com/bazelbuild/bazel/releases.
+     This should be _**bazel-0.15.2-dist.zip**_.
+   - Download the sha256sum _**bazel-0.15.2-dist.zip.sha256**_ and check the
+     hash of the sources zip.  These should match:
+      - ```sha256sum bazel-0.15.2-dist.zip**_```
+      - ```cat bazel-0.15.2-dist.zip.sha256```
+   - Make a bazel build directory in $HOME/bazel, and move all of the downloaded
+     bazel parts into it.
+      - ```mkdir $HOME/bazel```
+      - ```cd $HOME/bazel```
+      - ```mv ~/Downloads/bazel* .```
+      - ```unzip bazel-0.15.2-dist.zip```
+      - ```bash ./compile.sh```
+      - ```sudo cp output/bazel /usr/local/bin```
+
 
 
 -----
