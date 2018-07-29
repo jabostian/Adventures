@@ -3,7 +3,6 @@ This is my adventure with installing **TensorFlow** with GPU capabilities.  It's
 environment, but is still a complex one.  I prefer to use *Anaconda* for configurations like this,
 so my experience is from within an *Anaconda* environment.
 
-
 ### System Characteristics:
 - 3.5 gHZ Intel Core I5
 - 64 GB memory
@@ -14,35 +13,69 @@ so my experience is from within an *Anaconda* environment.
 
 ### Building with Nvidia GPU support
 Build all of TensorFlow from scratch with GPU support.  Start at
-https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes.
-CPU pegged.  About 4 GB of memory at high water mark.  Verbose output - info & warning msgs.
+https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes
+with the CPU pegged.  About 4 GB of memory used at the high water mark.
+
+At the time I did this, there were no debian packages created for 18.04, so this install
+is from runfiles and archives.  I was able to find others who blazed this trail before
+me, and found this blog entry to be helpful:
+https://medium.com/@taylordenouden/installing-tensorflow-gpu-on-ubuntu-18-04-89a142325138
 
 - Set up a conda environment (tf_gpu) to work from with just Python in it.  Work from This
-  environment so that we can do an A/B comparison between a GPU build and a vanilla install
-  for CPU.
+  environment so that we can do an A/B comparison between a GPU build and a vanilla TensorFlow
+  install with CPU.
 - Install all of the Nvidia assets required at the latest levels.  Some of these packages
-  were created before Ubuntu 18.04 became available, so the install packages are not yet
+  were created before Ubuntu 18.04 became available, so the Ubuntu packages are not yet
   available.  Install from the runfile instead of a ```.deb``` via ```apt```.
    - _**Cuda Toolkit 9.2**_  Found these instructions: https://linoxide.com/linux-how-to/install-cuda-ubuntu/
-      - Already had build-essential installed, so gcc and linux headers are available
-      - ```sudo apt install nvidia-384```
+      - I Already had build-essential installed, so gcc and linux headers are available
       - Get the latest install runfile from https://developer.nvidia.com/cuda-downloads.
         I got ```cuda_9.2.148_396.37_linux.run```
       - ```chmod +x cuda_9.2.148_396.37_linux.run```
       - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --driver```
       - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --toolkit --override```
+      - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --samples```
+      - Make the following environmental updates:
+         - Add ```/usr/local/cuda-9.2/bin``` to ```PATH``` in ```~/.bashrc```
+         - Add ```/usr/local/cuda-9.2/lib64``` to ```LD_LIBRARY_PATH``` in ```~/.bashrc```
 
+After this installation, these components will be present:
+- CUDA Toolkit 9.2
+- NVIDIA drivers 390.48
+- NVIDIA samples in $HOME
 
+Now install the NVIDIA Deep Neural Network library (cuDNN) from the cuDNN download
+page https://developer.nvidia.com/rdp/cudnn-download.  Choose the appropriate version
+for CUDA 9.2.  As with the CUDA tooklot, there is no Ubuntu 18.04 package to install
+yet, so I chose the _**cuDNN v7.1.4 library for Linux**_.
+- Follow the directions to install from a tar file at
+  https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
+   - ```sudo cp cuda/include/cudnn.h /usr/local/cuda/include```
+   - ```sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64```
+   - ```sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*```
+- Set up ```CUDA_HOME``` in .bashrc:
+   - ```export CUDA_HOME=/usr/local/cuda-9.2```
 
+Install the NVIDIA CUDA Profile Tools Interface. Note that the documentation says
+this:
+- ```sudo apt-get install cuda-command-line-tools```
 
+but since I've installed from tar files for 18.04, this is the command that works:
 
+```sudo apt-get install libcupti-dev```
 
+NVIDIA setup is now complete.  I have a section in my ```.bashrc``` that looks like
+this now:
 
-After the installation, the versions of NVIDIA and TensorFlow packages are:
-- CUDA Toolkit 9.1
-- CUDA/grahics drivers 387.34
-- cuDNN  7.0.5
-- libcputi-dev 7.5.18
+```
+export CUDA_HOME=/usr/local/cuda-9.2
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+```
+
+Log off and back on, and re-enter the ```tf_gpu``` conda environment to get
+everything set up properly.
+
 
 -----
 
