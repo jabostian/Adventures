@@ -22,36 +22,36 @@ https://medium.com/@taylordenouden/installing-tensorflow-gpu-on-ubuntu-18-04-89a
 - Set up a conda environment (tf_gpu) to work from with just Python in it.  Work from This
   environment so that we can do an A/B comparison between a GPU build and a vanilla TensorFlow
   install with CPU.
-- Install all of the Nvidia assets required at the latest levels.  Some of these packages
-  were created before Ubuntu 18.04 became available, so the Ubuntu packages are not yet
-  available.  Install from the runfile instead of a ```.deb``` via ```apt```.
-   - _**Cuda Toolkit 9.2**_  Found these instructions: https://linoxide.com/linux-how-to/install-cuda-ubuntu/
-      - I Already had build-essential installed, so gcc and linux headers are available
-      - Get the latest install runfile from https://developer.nvidia.com/cuda-downloads.
-        I got ```cuda_9.2.148_396.37_linux.run```
-      - ```chmod +x cuda_9.2.148_396.37_linux.run```
-      - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --driver```
-      - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --toolkit --override```
-      - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --samples```
-      - ```sudo chown <user_id>:<user_group> -R $HOME/NVIDIA_CUDA-9.2_Samples```
-      - Make the following environmental updates:
-         - Add ```/usr/local/cuda-9.2/bin``` to ```PATH``` in ```~/.bashrc```
-         - Add ```/usr/local/cuda-9.2/lib64``` to ```LD_LIBRARY_PATH``` in ```~/.bashrc```
+
+#### Install the CUDA Toolkit
+This packages was created before Ubuntu 18.04 became available, so the Ubuntu packages
+are not yet available.  Install from the runfile instead of a ```.deb``` via ```apt```.
+- _**Cuda Toolkit 9.2**_  Found these instructions: https://linoxide.com/linux-how-to/install-cuda-ubuntu/
+  - I Already had build-essential installed, so gcc and linux headers are available
+  - Get the latest install runfile from https://developer.nvidia.com/cuda-downloads.
+    I got ```cuda_9.2.148_396.37_linux.run```
+  - ```chmod +x cuda_9.2.148_396.37_linux.run```
+  - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --driver```
+  - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --toolkit --override```
+  - ```sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --samples```
+  - ```sudo chown <user_id>:<user_group> -R $HOME/NVIDIA_CUDA-9.2_Samples```
+- Make the following environmental updates:
+  - Add ```/usr/local/cuda-9.2/bin``` to ```PATH``` in ```~/.bashrc```
+  - Add ```/usr/local/cuda-9.2/lib64``` to ```LD_LIBRARY_PATH``` in ```~/.bashrc```
 
 After this installation, these components will be present:
 - CUDA Toolkit 9.2
 - NVIDIA drivers 390.48
 - NVIDIA samples in $HOME
 
-Now install the NVIDIA Deep Neural Network library (cuDNN) from the cuDNN download
-page https://developer.nvidia.com/rdp/cudnn-download.  Choose the appropriate version
-for CUDA 9.2.  As with the CUDA tooklot, there is no Ubuntu 18.04 package to install
-yet, so I chose the _**cuDNN v7.1.4 library for Linux**_.
-- Follow the directions to install from a tar file at
-  https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
-   - ```sudo cp cuda/include/cudnn.h /usr/local/cuda/include```
-   - ```sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64```
-   - ```sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn*```
+#### Install the NVIDIA Deep Neural Network library (cuDNN)
+Get this from the cuDNN download page https://developer.nvidia.com/rdp/cudnn-download.
+Choose the appropriate version for CUDA 9.2.  
+-  _**cuDNN v7.1.4 library for Linux**_  Follow the directions to install from a
+  tar file at https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
+   - ```sudo cp cuda/include/cudnn.h /usr/local/cuda-9.2/include```
+   - ```sudo cp cuda/lib64/libcudnn* /usr/local/cuda-9.2/lib64```
+   - ```sudo chmod a+r /usr/local/cuda-9.2/include/cudnn.h /usr/local/cuda-9.2/lib64/libcudnn*```
 - Set up ```CUDA_HOME``` in .bashrc:
    - ```export CUDA_HOME=/usr/local/cuda-9.2```
 
@@ -62,13 +62,21 @@ this:
 but since I've installed from tar files for 18.04, this is the command that works:
 - ```sudo apt-get install libcupti-dev```
 
+Install the NVIDIA Collective Communications Library (NCCL).  Download the tar file
+from https://developer.nvidia.com/nccl/nccl-download.  Choose
+_**NCCL 2.2.13 O/S agnostic and CUDA 9.2**_
+- Install according to the instructions at https://github.com/NVIDIA/nccl
+   -
+
+
 NVIDIA setup is now complete.  I have a section in my ```.bashrc``` that looks like
 this now:
 
 ```
 export CUDA_HOME=/usr/local/cuda-9.2
-export PATH=$CUDA_HOME/bin:$PATH
-export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+export PATH=$CUDA_HOME/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/extras/CUPTI/lib86
 ```
 
 All of the NVIDIA packages that TensorFlow depends on should now be installed.
@@ -112,6 +120,42 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
       - ```unzip bazel-0.15.2-dist.zip```
       - ```bash ./compile.sh```
       - ```sudo cp output/bazel /usr/local/bin```
+- Make sure that all of the necessary packages are installed.  Since we're doing this
+  through an Anaconda environment (tf_gpu), add any packages that are not already
+  present.  The complete list is:
+  - numpy
+  - dev
+  - pip
+  - wheel
+
+  I had to run this command from tf_gpu to complete my environment:
+  - ```conda listall numpy```
+- Configure the TensorFlow build.  There is a script that will ask several questions
+  about how you want it built.
+  - ```cd $HOME/git/tensorflow```
+  - ```./configure```
+  - Take all of the defaults, except for the ones that enable nvidia gpu.  Here are
+    the relevant settings:
+    ```
+    Please specify the CUDA SDK version you want to use.
+      [Leave empty to default to CUDA 9.0]: 9.2
+
+
+    Please specify the location where CUDA 9.2 toolkit is installed. Refer to
+      README.md for more details.
+      [Default is /usr/local/cuda]: /usr/local/cuda-9.2
+
+
+    Please specify the cuDNN version you want to use.
+      [Leave empty to default to cuDNN 7.0]: 7.1
+
+
+    Please specify the location where cuDNN 7 library is installed. Refer to
+      README.md for more details.
+      [Default is /usr/local/cuda-9.2]:
+    ```
+
+
 
 
 
