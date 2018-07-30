@@ -74,8 +74,7 @@ Choose _**NCCL 2.2.13 O/S agnostic and CUDA 9.2**_
    - ```cd nccl_2.2.13-1+cuda9.2_x86_64```
    - ```sudo cp include/nccl.h /usr/local/cuda-9.2/include```
    - ```sudo cp -R lib /usr/local/cuda-9.2```
-   - ```sudo chmod a+r /usr/local/cuda-9.2/include/nccl.h \
-                       /usr/local/cuda-9.2/lib /usr/local/cuda-9.2/lib/*```
+   - ```sudo chmod a+r /usr/local/cuda-9.2/include/nccl.h /usr/local/cuda-9.2/lib /usr/local/cuda-9.2/lib/*```
 
 NVIDIA setup is now complete.  I have a section in my ```.bashrc``` that looks like
 this now:
@@ -173,7 +172,7 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
     Please specify the location where NCCL 2 library is installed. Refer to
     README.md for more details. [Default is /usr/local/cuda-9.2]:
     ```
-    
+
 
 
 
