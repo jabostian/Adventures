@@ -55,19 +55,27 @@ Choose the appropriate version for CUDA 9.2.
 - Set up ```CUDA_HOME``` in .bashrc:
    - ```export CUDA_HOME=/usr/local/cuda-9.2```
 
-Install the NVIDIA CUDA Profile Tools Interface. Note that the documentation says
-this:
+#### Install the NVIDIA CUDA Profile Tools Interface
+Note that the documentation says this:
 - ```sudo apt-get install cuda-command-line-tools```
 
 but since I've installed from tar files for 18.04, this is the command that works:
 - ```sudo apt-get install libcupti-dev```
 
-Install the NVIDIA Collective Communications Library (NCCL).  Download the tar file
-from https://developer.nvidia.com/nccl/nccl-download.  Choose
-_**NCCL 2.2.13 O/S agnostic and CUDA 9.2**_
-- Install according to the instructions at https://github.com/NVIDIA/nccl
-   -
-
+#### Install the NVIDIA Collective Communications Library (NCCL)
+Download the tar file from https://developer.nvidia.com/nccl/nccl-download.  
+Choose _**NCCL 2.2.13 O/S agnostic and CUDA 9.2**_
+- Install according to the instructions at
+  https://docs.nvidia.com/deeplearning/sdk/nccl-install-guide/index.html#tar
+   - ```mkdir $HOME/tmp```
+   - ```cd $HOME/tmp```
+   - ```mv $HOME/Downloads/nccl_2.2.13-1+cuda9.2_x86_64.txz .```
+   - ```tar -xvf nccl_2.2.13-1+cuda9.2_x86_64.txz```
+   - ```cd nccl_2.2.13-1+cuda9.2_x86_64```
+   - ```sudo cp include/nccl.h /usr/local/cuda-9.2/include```
+   - ```sudo cp -R lib /usr/local/cuda-9.2```
+   - ```sudo chmod a+r /usr/local/cuda-9.2/include/nccl.h \
+                       /usr/local/cuda-9.2/lib /usr/local/cuda-9.2/lib/*```
 
 NVIDIA setup is now complete.  I have a section in my ```.bashrc``` that looks like
 this now:
@@ -154,6 +162,18 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
       README.md for more details.
       [Default is /usr/local/cuda-9.2]:
     ```
+
+    and further on:
+    ```
+    Please specify the NCCL version you want to use. If NCCL 2.2 is not installed,
+    then you can use version 1.3 that can be fetched automatically but it may have
+    worse performance with multiple GPUs. [Default is 2.2]:
+
+
+    Please specify the location where NCCL 2 library is installed. Refer to
+    README.md for more details. [Default is /usr/local/cuda-9.2]:
+    ```
+    
 
 
 
