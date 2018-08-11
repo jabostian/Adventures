@@ -21,6 +21,7 @@ resolved everything.  I'm just going to enjoy this build.
 - Ubuntu Gnome 18.04
 - Anaconda and Python 3.6.5
 - Packages build-essential, linux-headers, clang 6.0, zip, and unzip installed
+- Oracle java 8
 
 ### Install the NVIDIA Drivers, Libraries, and Samples
 At the time I did this, there were no Debian packages created for 18.04, so this install
@@ -107,25 +108,21 @@ some of the samples run without trouble, then it's time for TensorFlow.
 ### Building TensorFlow from Sources with GPU Support
 Build all of TensorFlow from scratch with GPU support.  Start at
 https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes
-with the CPU pegged.  About 4 GB of memory used at the high water mark.
+with the CPU pegged.  About 4 GB of memory used atcrosstool_wrapper_driver_is_not_gcc``` the high water mark.
 
 #### Install Bazel  
 - Again, we have to build this from source, since the packages for 18.04 are not
   yet ready.  Work from the instructions at
   https://docs.bazel.build/versions/master/install-compile-source.html
-   - ```sudo apt install openjdk-8-jdk```
-      - This doesn't work.  Apparently we need Oracle Java instead of openJDK.  See
-        this StackOverflow thread:
-        https://github.com/tensorflow/tensorflow/issues/7497
-         - ```sudo apt remove openjdk-8-jdk```
-         - Download the compressed tar file for Linux X/86 AMD64
-         - ```tar -xvzf tar zxvf jdk1.8.0_181-linux-x64.tar.gz```
-         - ```sudo mv jdk1.8.0_181 /usr/local```
-         - Add this to ```.bashrc```:
-            - ```export JAVA_HOME=/usr/local/jdk1.8.0_181```
-            - ```export PATH=$CUDA_HOME/bin:$JAVA_HOME/bin${PATH:+:${PATH}}```
-         - Re-build bazel as below, and copy it to ```/usr/local/bin```
-         - Try to build TensorFlow again
+   - Bazel requires Oracle Java and won't work with the OpenJDK.  See
+     this StackOverflow thread: https://github.com/tensorflow/tensorflow/issues/7497
+      - Download the compressed tar file for Linux X/86 AMD64
+      - ```tar -xvzf tar zxvf jdk1.8.0_181-linux-x64.tar.gz```
+      - ```sudo mv jdk1.8.0_181 /usr/local```
+      - Add this to ```.bashrc```:
+         - ```export JAVA_HOME=/usr/local/jdk1.8.0_181```
+         - ```export PATH=$CUDA_HOME/bin:$JAVA_HOME/bin${PATH:+:${PATH}}```
+         - Bounce your shell session to pick up the proper environmental vars.
    - Download the bazel sources zip file from https://github.com/bazelbuild/bazel/releases.
      This should be _**bazel-0.15.2-dist.zip**_.
    - Download the sha256sum _**bazel-0.15.2-dist.zip.sha256**_ and check the
