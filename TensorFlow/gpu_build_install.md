@@ -1,6 +1,18 @@
 ### Intro
 This is my adventure with installing **TensorFlow** with GPU capabilities.  It's a well documented environment, but is still a complex one.  I prefer to use *Anaconda* for configurations like this, so my experience is from within an *Anaconda* environment.
 
+I had to make several attempts at success before everything worked.  When trying to build
+with ```gcc```, I had a lot of problems when the process tried to build ```crosstool_wrapper_driver_is_not_gcc```.  After rumaging around a bit, I decided to
+install ```clang``` and its dependencies, and build with that (```--config=cuda_lang```
+instead of ```--config=cuda```).  This didn't work either because of some unsatisfied
+dependencies that broke the build of a different part of the build.
+
+I decided to clean up and debug the original problem using ```gcc```, and then the
+build succeeded.  ```clang``` brings on a fair number of other packages, like ```llvm```,
+and undoubtedly one or more of these resolves the problem with building
+```crosstool_wrapper_driver_is_not_gcc```.  I'm not going to figure out exactly what
+resolved everything.  I'm just going to enjoy this build.
+
 ### System Characteristics:
 - 3.5 gHZ Intel Core I5
 - 64 GB memory
@@ -8,7 +20,7 @@ This is my adventure with installing **TensorFlow** with GPU capabilities.  It's
 - 500 GB SSD
 - Ubuntu Gnome 18.04
 - Anaconda and Python 3.6.5
-- Packages build-essential, linux-headers, zip, and unzip installed
+- Packages build-essential, linux-headers, clang 6.0, zip, and unzip installed
 
 ### Install the NVIDIA Drivers, Libraries, and Samples
 At the time I did this, there were no Debian packages created for 18.04, so this install
@@ -187,11 +199,13 @@ Perform this build from a Conda environment.
 
     Please specify the location where NCCL 2 library is installed. Refer to
     README.md for more details. [Default is /usr/local/cuda-9.2]:
-    ```
+    ```    
 - Perform the build
-   - ```$ bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_package```
+   - ```$ bazel build --config=opt --config=cuda --verbose_failures //tensorflow/tools/pip_package:build_pip_package 2>&1 | tee build.log```
 
-```WARNING: The following configs were expanded more than once: [cuda]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.```
+   I've had to run the build several times to work out the kinks.  Between
+   attempts, it's a good idea to clean up:
+      - ```bazel clean --expunge```
 
 
 
