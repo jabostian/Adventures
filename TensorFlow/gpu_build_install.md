@@ -16,7 +16,7 @@ resolved everything.  I'm just going to enjoy this build.
 ### System Characteristics:
 - 3.5 gHZ Intel Core I5
 - 64 GB memory
-- Nvidia GTX-1070 graphics card
+- NVIDIA GTX-1070 graphics card
 - 500 GB SSD
 - Ubuntu Gnome 18.04
 - Anaconda and Python 3.6
@@ -32,7 +32,7 @@ indicates the platform and python level that is it for.  In this case:
 - Platform: _**linux_x86_64**_, 64-bit Linux
 - Python: _**cp36-cp36m**_, python (CPython) version 3.6
 
-One gotcha is that even though the anaconda version installed is for Python 3.6,
+One gotcha is that even though the Anaconda version installed is for Python 3.6,
 conda will install the latest 3.* version available.  If you don't specify the
 Python version when creating your conda environment, it may install 3.7 or later,
 and the pip install for the wheel that gets built will say the wheel version is
@@ -50,10 +50,10 @@ with the right versions where needed:
    - ```conda create --name tf_gpu python=3.6.6 cython numpy pip six wheel```
 - The default version of pip that comes with Anaconda is often downlevel.
   Upgrade pip:
-   - ```
-     source activate tf_gpu
-     pip install --upgrade pip
-     ```
+  ```
+  source activate tf_gpu
+  pip install --upgrade pip
+  ```
 
 ### Install the NVIDIA Drivers, Libraries, and Samples
 At the time I did this, there were no Debian packages created for 18.04, so this install
@@ -64,17 +64,13 @@ I was able to find others who blazed this trail before me, and found this blog e
 to be helpful:
 https://medium.com/@taylordenouden/installing-tensorflow-gpu-on-ubuntu-18-04-89a142325138
 
-- Set up a conda environment (tf_gpu) to work from with just Python in it.  Work from This
-  environment so that we can do an A/B comparison between a GPU build and a vanilla TensorFlow
-  install with CPU.
-
 #### Install the CUDA Toolkit
 Install from the runfile instead of one of the Linux packages.
 - _**Cuda Toolkit 9.2**_  Found these instructions: https://linoxide.com/linux-how-to/install-cuda-ubuntu/
   - I Already had build-essential installed, so ```gcc``` and linux headers are available
   - Get the latest install runfile from https://developer.nvidia.com/cuda-downloads.
     I got ```cuda_9.2.148_396.37_linux.run```
-  - ```
+    ```
     chmod +x cuda_9.2.148_396.37_linux.run
     sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --driver
     sudo ./cuda_9.2.148_396.37_linux.run --verbose --silent --toolkit --override
@@ -95,36 +91,36 @@ Get this from the cuDNN download page https://developer.nvidia.com/rdp/cudnn-dow
 Choose the appropriate version for CUDA 9.2.  
 -  _**cuDNN v7.1.4 library for Linux**_  Follow the directions to install from a
   tar file at https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
-   - ```
-     sudo cp cuda/include/cudnn.h /usr/local/cuda-9.2/include
-     sudo cp cuda/lib64/libcudnn* /usr/local/cuda-9.2/lib64
-     sudo chmod a+r /usr/local/cuda-9.2/include/cudnn.h /usr/local/cuda-9.2/lib64/libcudnn*
-     ```
+  ```
+  sudo cp cuda/include/cudnn.h /usr/local/cuda-9.2/include
+  sudo cp cuda/lib64/libcudnn* /usr/local/cuda-9.2/lib64
+  sudo chmod a+r /usr/local/cuda-9.2/include/cudnn.h /usr/local/cuda-9.2/lib64/libcudnn*
+  ```
 - Set up ```CUDA_HOME``` in .bashrc:
-   - ```export CUDA_HOME=/usr/local/cuda-9.2```
+  ```export CUDA_HOME=/usr/local/cuda-9.2```
 
 #### Install the NVIDIA CUDA Profile Tools Interface
 Note that the documentation says this:
-- ```sudo apt-get install cuda-command-line-tools```
+```sudo apt-get install cuda-command-line-tools```
 
 but since I've installed from tar files for 18.04, this is the command that works:
-- ```sudo apt-get install libcupti-dev```
+```sudo apt-get install libcupti-dev```
 
 #### Install the NVIDIA Collective Communications Library (NCCL)
 Download the tar file from https://developer.nvidia.com/nccl/nccl-download.  
 Choose _**NCCL 2.2.13 O/S agnostic and CUDA 9.2**_
 - Install according to the instructions at
   https://docs.nvidia.com/deeplearning/sdk/nccl-install-guide/index.html#tar
-   - ```
-     mkdir $HOME/tmp
-     cd $HOME/tmp
-     mv $HOME/Downloads/nccl_2.2.13-1+cuda9.2_x86_64.txz .
-     tar -xvf nccl_2.2.13-1+cuda9.2_x86_64.txz
-     cd nccl_2.2.13-1+cuda9.2_x86_64
-     sudo cp include/nccl.h /usr/local/cuda-9.2/include
-     sudo cp -R lib /usr/local/cuda-9.2
-     sudo chmod a+r /usr/local/cuda-9.2/include/nccl.h /usr/local/cuda-9.2/lib /usr/local/cuda-9.2/lib/*
-     ```
+  ```
+  mkdir $HOME/tmp
+  cd $HOME/tmp
+  mv $HOME/Downloads/nccl_2.2.13-1+cuda9.2_x86_64.txz .
+  tar -xvf nccl_2.2.13-1+cuda9.2_x86_64.txz
+  cd nccl_2.2.13-1+cuda9.2_x86_64
+  sudo cp include/nccl.h /usr/local/cuda-9.2/include
+  sudo cp -R lib /usr/local/cuda-9.2
+  sudo chmod a+r /usr/local/cuda-9.2/include/nccl.h /usr/local/cuda-9.2/lib /usr/local/cuda-9.2/lib/*
+  ```
 
 NVIDIA setup is now complete.  
 
@@ -136,10 +132,10 @@ Try out some of the NVIDIA samples to verify things before moving on with Tensor
 The samples were installed to ```$HOME/NVIDIA_CUDA-9.2_Samples```.  Follow the sample build
 instructions at https://docs.nvidia.com/cuda/cuda-samples/index.html#building-samples.
 
-- ```
-  cd $HOME/NVIDIA_CUDA-9.2_Samples
-  make
-  ```
+```
+cd $HOME/NVIDIA_CUDA-9.2_Samples
+make
+```
 
 This builds a lot of stuff in the samples directory.  If everything builds and
 some of the samples run without trouble, then it's time for TensorFlow.
@@ -155,52 +151,53 @@ yet ready.  Work from the instructions at
 https://docs.bazel.build/versions/master/install-compile-source.html
 - Bazel requires Oracle Java and won't work with the OpenJDK.  See
   this StackOverflow thread: https://github.com/tensorflow/tensorflow/issues/7497
-   - Download the compressed tar file for Linux X/86 AMD64
-   - ```
+   - Download the compressed tar file for Linux X/86 AMD64 from the Oracle Java
+     web site http://www.oracle.com/technetwork/java/javase/downloads/index.html
+     ```
      tar -xvzf tar zxvf jdk1.8.0_181-linux-x64.tar.gz
      sudo mv jdk1.8.0_181 /usr/local
      ```
    - Add a ```JAVA_HOME```, to your environment variables, and update your
      ```PATH```.  I have a section in my ```.bashrc``` that looks like this now:
         ```
-        export CUDA_HOME=/usr/local/cuda-9.2
-        export JAVA_HOME=/usr/local/jdk1.8.0_181
-        export PATH=$CUDA_HOME/bin:$JAVA_HOME/bin${PATH:+:${PATH}}
-        export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-        export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/extras/CUPTI/lib86
+     export CUDA_HOME=/usr/local/cuda-9.2
+     export JAVA_HOME=/usr/local/jdk1.8.0_181
+     export PATH=$CUDA_HOME/bin:$JAVA_HOME/bin${PATH:+:${PATH}}
+     export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/extras/CUPTI/lib86
 
-        # Added by Anaconda3 installer
-        export PATH="/home/joshua/anaconda3/bin:$PATH"
-        ```
+     # Added by Anaconda3 installer
+     export PATH="/home/joshua/anaconda3/bin:$PATH"
+     ```
    - Bounce your shell session to pick up the proper environmental vars.
    - Download the bazel sources zip file from https://github.com/bazelbuild/bazel/releases.
      This should be _**bazel-0.15.2-dist.zip**_.
    - Download the sha256sum _**bazel-0.15.2-dist.zip.sha256**_ and check the
      hash of the sources zip.  These should match:
-      - ```
-        sha256sum bazel-0.15.2-dist.zip
-        cat bazel-0.15.2-dist.zip.sha256
-        ```
-   - Make a bazel build directory in $HOME/bazel, and move all of the downloaded
+     ```
+     sha256sum bazel-0.15.2-dist.zip
+     cat bazel-0.15.2-dist.zip.sha256
+     ```
+   - Make a bazel build directory in ```$HOME/bazel```, and move all of the downloaded
      bazel parts into it.
-      - ```
-        mkdir $HOME/bazel
-        cd $HOME/bazel
-        mv ~/Downloads/bazel* .
-        unzip bazel-0.15.2-dist.zip
-        bash ./compile.sh
-        sudo cp output/bazel /usr/local/bin
-        ```
+     ```
+     mkdir $HOME/bazel
+     cd $HOME/bazel
+     mv ~/Downloads/bazel* .
+     unzip bazel-0.15.2-dist.zip
+     bash ./compile.sh
+     sudo cp output/bazel /usr/local/bin
+     ```
 
 #### Configure and Perform the Tensorflow Build
 - Get all of the TensorFlow Source
   - ```git clone https://github.com/tensorflow/tensorflow```
 - Configure the TensorFlow build.  There is a script that will ask several questions
   about how you want it built.
-  - ```
-    cd $HOME/git/tensorflow
-    ./configure
-    ```
+  ```
+  cd $HOME/git/tensorflow
+  ./configure
+  ```
   - Take all of the defaults, except for the ones that enable nvidia gpu.  Here are
     the relevant settings:
     ```
