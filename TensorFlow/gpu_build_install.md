@@ -97,10 +97,9 @@ Build all of TensorFlow from scratch with GPU support.  Start at
 https://www.tensorflow.org/install/install_sources.  The build itself takes about 35 minutes
 with the CPU pegged.  About 4 GB of memory used at the high water mark.
 
-- Get all of the TensorFlow Source
-   - ```git clone https://github.com/tensorflow/tensorflow```
-- Install bazel to build the code.  Again, we have to build this from source,
-  since the packages for 18.04 are not yet ready.  Work from the instructions at
+#### Install Bazel  
+- Again, we have to build this from source, since the packages for 18.04 are not
+  yet ready.  Work from the instructions at
   https://docs.bazel.build/versions/master/install-compile-source.html
    - ```sudo apt install openjdk-8-jdk```
       - This doesn't work.  Apparently we need Oracle Java instead of openJDK.  See
@@ -129,6 +128,9 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
       - ```unzip bazel-0.15.2-dist.zip```
       - ```bash ./compile.sh```
       - ```sudo cp output/bazel /usr/local/bin```
+
+#### Create a Conda Environment for the Build
+Perform this build from a Conda environment.
 - Make sure that all of the necessary packages are installed.  Since we're doing this
   through an Anaconda environment (tf_gpu), add any packages that are not already
   present.  The complete list is:
@@ -147,6 +149,10 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
   export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/extras/CUPTI/lib86
   ```
+
+#### Configure and Perform the Tensorflow Build
+- Get all of the TensorFlow Source
+  - ```git clone https://github.com/tensorflow/tensorflow```
 - Configure the TensorFlow build.  There is a script that will ask several questions
   about how you want it built.
   - ```cd $HOME/git/tensorflow```
