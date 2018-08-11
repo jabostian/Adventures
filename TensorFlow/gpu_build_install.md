@@ -76,22 +76,14 @@ Choose _**NCCL 2.2.13 O/S agnostic and CUDA 9.2**_
    - ```sudo cp -R lib /usr/local/cuda-9.2```
    - ```sudo chmod a+r /usr/local/cuda-9.2/include/nccl.h /usr/local/cuda-9.2/lib /usr/local/cuda-9.2/lib/*```
 
-NVIDIA setup is now complete.  I have a section in my ```.bashrc``` that looks like
-this now:
-
-```
-export CUDA_HOME=/usr/local/cuda-9.2
-export PATH=$CUDA_HOME/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/extras/CUPTI/lib86
-```
+NVIDIA setup is now complete.  
 
 All of the NVIDIA packages that TensorFlow depends on should now be installed.
 Log off and back on, and re-enter the ```tf_gpu``` conda environment to get
 everything set up properly.  
 
 Try out some of the NVIDIA samples to verify things before moving on with TensorFlow.
-The samples were installed to $HOME/NVIDIA_CUDA-9.2_Samples.  Follow the sample build
+The samples were installed to ```$HOME/NVIDIA_CUDA-9.2_Samples```.  Follow the sample build
 instructions at https://docs.nvidia.com/cuda/cuda-samples/index.html#building-samples.
 
 - ```cd $HOME/NVIDIA_CUDA-9.2_Samples```
@@ -99,8 +91,6 @@ instructions at https://docs.nvidia.com/cuda/cuda-samples/index.html#building-sa
 
 This builds a lot of stuff in the samples directory.  If everything builds and
 some of the samples run without trouble, then it's time for TensorFlow.
-
------
 
 ### Building TensorFlow from Sources with GPU Support
 Build all of TensorFlow from scratch with GPU support.  Start at
@@ -113,6 +103,18 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
   since the packages for 18.04 are not yet ready.  Work from the instructions at
   https://docs.bazel.build/versions/master/install-compile-source.html
    - ```sudo apt install openjdk-8-jdk```
+      - This doesn't work.  Apparently we need Oracle Java instead of openJDK.  See
+        this StackOverflow thread:
+        https://github.com/tensorflow/tensorflow/issues/7497
+         - ```sudo apt remove openjdk-8-jdk```
+         - Download the compressed tar file for Linux X/86 AMD64
+         - ```tar -xvzf tar zxvf jdk1.8.0_181-linux-x64.tar.gz```
+         - ```sudo mv jdk1.8.0_181 /usr/local```
+         - Add this to ```.bashrc```:
+            - ```export JAVA_HOME=/usr/local/jdk1.8.0_181```
+            - ```export PATH=$CUDA_HOME/bin:$JAVA_HOME/bin${PATH:+:${PATH}}```
+         - Re-build bazel as below, and copy it to ```/usr/local/bin```
+         - Try to build TensorFlow again
    - Download the bazel sources zip file from https://github.com/bazelbuild/bazel/releases.
      This should be _**bazel-0.15.2-dist.zip**_.
    - Download the sha256sum _**bazel-0.15.2-dist.zip.sha256**_ and check the
@@ -137,6 +139,14 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
 
   I had to run this command from tf_gpu to complete my environment:
   - ```conda listall numpy```
+  - I have a section in my ```.bashrc``` that looks like
+  this now:
+  ```
+  export CUDA_HOME=/usr/local/cuda-9.2
+  export PATH=$CUDA_HOME/bin${PATH:+:${PATH}}
+  export LD_LIBRARY_PATH=$CUDA_HOME/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$CUDA_HOME/extras/CUPTI/lib86
+  ```
 - Configure the TensorFlow build.  There is a script that will ask several questions
   about how you want it built.
   - ```cd $HOME/git/tensorflow```
@@ -172,9 +182,10 @@ with the CPU pegged.  About 4 GB of memory used at the high water mark.
     Please specify the location where NCCL 2 library is installed. Refer to
     README.md for more details. [Default is /usr/local/cuda-9.2]:
     ```
+- Perform the build
+   - ```$ bazel build --config=opt --config=cuda //tensorflow/tools/pip_package:build_pip_package```
 
-
-
+```WARNING: The following configs were expanded more than once: [cuda]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.```
 
 
 
@@ -226,7 +237,7 @@ Follow the instructions at https://www.tensorflow.org/install/install_sources
    - ```sudo apt upgrade bazel```
 - Install TensorFlow Python dependencies
    - I use Anaconda for this.  It's an easier way to manage the configuration of prereq-ed
-   packages, but it requires running from a named environment.  Still an easier way to manage
+   packaWARNING: The following configs were expanded more than once: [cuda]. For repeatable flags, repeats are counted twice and may lead to unexpected behavior.ges, but it requires running from a named environment.  Still an easier way to manage
    things.
       - ```conda create --name tf python numpy pip wheel```
       - ```source activate tf```
