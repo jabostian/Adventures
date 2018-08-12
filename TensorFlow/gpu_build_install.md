@@ -1,8 +1,12 @@
 ### Intro
-This is my adventure with installing **TensorFlow** with GPU capabilities.  It's a well documented environment, but is still a complex one.  I prefer to use *Anaconda* for configurations like this, so my experience is from within an *Anaconda* environment.
+This is my adventure with installing **TensorFlow** 1.9 with GPU capabilities.  It's
+a well documented environment, but is still a complex one.  I prefer to use
+*Anaconda* for configurations like this, so my experience is from within an
+*Anaconda* environment.
 
 I had to make several attempts at success before everything worked.  When trying to build
-with ```gcc```, I had a lot of problems when the process tried to build ```crosstool_wrapper_driver_is_not_gcc```.  After rumaging around a bit, I decided to
+with ```gcc```, I had a lot of problems when the process tried to build
+```crosstool_wrapper_driver_is_not_gcc```.  After rumaging around a bit, I decided to
 install ```clang``` and its dependencies, and build with that (```--config=cuda_lang```
 instead of ```--config=cuda```).  This didn't work either because of some unsatisfied
 dependencies that broke the build of a different part of the build.
