@@ -72,14 +72,12 @@ Repeatedly take small steps in the direction that minimizes loss
 - Negative gradient steps
 - This strategy is **gradient descent**
 
-<br>
 ![Gradient Descent](./crash_course/images/gradient_descent.png)
 
 **Learning rate** is a hyperparameter that determines how large of a step to
 take in the direction of the negative gradient to minimize loss.
 - This strategy is **gradient descent**
 
-<br>
 ![Learning rate](./crash_course/images/learning_rate.png)
 
 If choose too large of a step, the model can diverge, and never minimize the
