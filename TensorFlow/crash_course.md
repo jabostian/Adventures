@@ -16,12 +16,16 @@ describe how data moves through a graph, or a series of processing nodes. Each
 node in the graph represents a mathematical operation, and each connection or
 edge between nodes is a multidimensional data array, or tensor.**_
 
-###Sessions
+### Sessions
 Here my notes on the course sessions/chapters.
+
+-----
 
 #### Framing
 **Regression model** predicts continuous values
 **Classification model** predicts discrete values
+
+-----
 
 #### Descending into ML
 When talking about a simple linear regression, might use _**y = mx + b**_.  in
@@ -55,6 +59,8 @@ whole dataset.
 MSE is commonly used in ML, but it isn't the only practical, or even the best
 loss function in all cases.
 
+-----
+
 #### Reducing Loss
 **Hyperparameters** - config settings use to tune the model during training
 
@@ -65,13 +71,21 @@ and biases tells us how the loss changes for a given example
 Repeatedly take small steps in the direction that minimizes loss
 - Negative gradient steps
 - This strategy is **gradient descent**
+
 <br>
 ![Gradient Descent](./crash_course/images/gradient_descent.png)
 
 **Learning rate** is a hyperparameter that determines how large of a step to
 take in the direction of the negative gradient to minimize loss.
 - This strategy is **gradient descent**
+
 <br>
 ![Learning rate](./crash_course/images/learning_rate.png)
+
+If choose too large of a step, the model can diverge, and never minimize the
+loss function.  In this case, reduce the step size by a large value and re-try.
+
+
+-----
 
 ### References
