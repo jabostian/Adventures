@@ -28,7 +28,7 @@ Machine learning it's _**y = wx + b**_
 
 **Loss** is the error between prediction and actual
 
-![Home prices](./crash_course/images/house_prices.png)
+![Home prices](./crash_course/images/house_price.png)
 
 
 ### References
