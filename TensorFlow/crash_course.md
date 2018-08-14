@@ -31,19 +31,47 @@ Machine learning it's _**y = wx + b**_
 
 **Loss** is the error between prediction and actual
 
+<br>
 ![Home prices](./crash_course/images/house_price.png)
 
 Useful loss function is squared error:
+<br>
 ![Squared error](./crash_course/images/squared_error.png)
 
 When training a model, want to minimize loss across all training examples:
+<br>
 ![L2 loss](./crash_course/images/L2_loss.png)
 
 Goal is to minimize loss by finding the right set of weights and biases
 on average, across all examples:
+<br>
 ![Model loss](./crash_course/images/model_loss.png)
 
+**Mean Squared Error (MSE)** id the average squared loss per example over the
+whole dataset.
+<br>
+![Mean Squared Error](./crash_course/images/MSE.png)
 
+MSE is commonly used in ML, but it isn't the only practical, or even the best
+loss function in all cases.
 
+#### Reducing Loss
+**Hyperparameters** - config settings use to tune the model during training
+
+The derivative of the loss function (L2 loss here) with respect to the weights
+and biases tells us how the loss changes for a given example
+- Simple to compute, and is a convex function
+
+Repeatedly take small steps in the direction that minimizes loss
+- Negative gradient steps
+- This strategy is **gradient descent**
+<br>
+![Gradient Descent](./crash_course/images/gradient_descent.png)
+
+**Learning rate** is a hyperparameter that determines how large of a step to
+take in the direction of the negative gradient to minimize loss.
+- This strategy is **gradient descent**
+<br>
+![Learning rate](./crash_course/images/learning_rate.png)
 
 ### References
