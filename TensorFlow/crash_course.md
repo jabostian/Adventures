@@ -16,6 +16,9 @@ describe how data moves through a graph, or a series of processing nodes. Each
 node in the graph represents a mathematical operation, and each connection or
 edge between nodes is a multidimensional data array, or tensor.**_
 
+###Sessions
+Here my notes on the course sessions/chapters.
+
 #### Framing
 **Regression model** predicts continuous values
 **Classification model** predicts discrete values
@@ -30,6 +33,17 @@ Machine learning it's _**y = wx + b**_
 
 ![Home prices](./crash_course/images/house_price.png)
 
+Useful loss function is squared error:
+![Squared error](./crash_course/images/squared_error.png)
+
+When training a model, want to minimize loss across all training examples:
+![L2 loss](./crash_course/images/L2_loss.png)
+
+Goal is to minimize loss by finding the right set of weights and biases
+on average, across all examples:
+![Model loss](./crash_course/images/model_loss.png)
+
+
+
 
 ### References
-https://www.tensorflow.org/tutorials/
