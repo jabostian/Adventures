@@ -1,6 +1,6 @@
 
 
-### Intro
+## Intro
 My experiences with the TensorFlow crash course.  I've collected the python code
 for this class in the code directory of this repo.  There are
 _**Jupyter Notebooks**_ for these as well in the notebooks directory.
@@ -16,18 +16,18 @@ describe how data moves through a graph, or a series of processing nodes. Each
 node in the graph represents a mathematical operation, and each connection or
 edge between nodes is a multidimensional data array, or tensor.**_
 
-### Sessions
+## Sessions
 Here my notes on the course sessions/chapters.
 
 -----
 
-#### Framing
+### Framing
 **Regression model** predicts continuous values
 **Classification model** predicts discrete values
 
 -----
 
-#### Descending into ML
+### Descending into ML
 When talking about a simple linear regression, might use _**y = mx + b**_.  in
 Machine learning it's _**y = wx + b**_
 - **w** represents weights instead of slope
@@ -61,7 +61,7 @@ loss function in all cases.
 
 -----
 
-#### Reducing Loss
+### Reducing Loss
 **Hyperparameters** - config settings use to tune the model during training
 
 The derivative of the loss function (L2 loss here) with respect to the weights
@@ -78,10 +78,47 @@ Repeatedly take small steps in the direction that minimizes loss
 take in the direction of the negative gradient to minimize loss.
 - This strategy is **gradient descent**
 
+<br>
 ![Learning rate](./crash_course/images/learning_rate.png)
 
 If choose too large of a step, the model can diverge, and never minimize the
 loss function.  In this case, reduce the step size by a large value and re-try.
+
+A gradient descent **batch** is the group of examples used to calculate the
+gradient in a single iteration.  Batches can be the size of the entire dataset,
+but they can be a subset to reduce compute time.
+
+**Stochastic Gradient Descent (SGD)** chooses one example from the dataset at random
+per iteration to calculate the gradient.  This is very noisy, but does eventually
+work, given enough iterations.
+
+**Mini-batch SGD** is a compromise where typically between 10 and 1000 examples
+are chosen at random from the full dataset for gradient calculation.  This
+balances noise and efficiency of calculation.
+
+-----
+
+### First Steps with TF
+![API Hierarchy](./crash_course/images/API_hierarchy.png)
+
+TensorFlow consists of 2 components:
+- A graph protocol buffer
+- A runtime that executes the graph
+
+tf.estimator is the high level API that the crash course is based on.
+tf.estimator is compatible with the Scikit-learn ML library.
+
+#### Programming exercise ()
+[Intro to Pandas API](./crash_course/notebooks/intro_to_pandas.ipynb)<br>
+[Pandas documentation](http://pandas.pydata.org/pandas-docs/stable/index.html)
+
+
+- Pandas is a column-oriented data analysis API
+- Dataframe - a relational table
+- Series - a single column.  A dataframe contains one or more series, and
+  a name for each series
+
+
 
 
 -----
