@@ -16,6 +16,8 @@ describe how data moves through a graph, or a series of processing nodes. Each
 node in the graph represents a mathematical operation, and each connection or
 edge between nodes is a multidimensional data array, or tensor.**_
 
+So _tensors_ are sets of data that _flow_ through the compute graph.
+
 ## Sessions
 Here my notes on the course sessions/chapters.
 
@@ -108,15 +110,23 @@ TensorFlow consists of 2 components:
 tf.estimator is the high level API that the crash course is based on.
 tf.estimator is compatible with the Scikit-learn ML library.
 
-#### Programming exercise ()
+#### Programming exercises
+See the _**intro_to_pandas**_ notebook for lesson and exercises.
+
 [Intro to Pandas API](./crash_course/notebooks/intro_to_pandas.ipynb)<br>
 [Pandas documentation](http://pandas.pydata.org/pandas-docs/stable/index.html)
-
 
 - Pandas is a column-oriented data analysis API
 - Dataframe - a relational table
 - Series - a single column.  A dataframe contains one or more series, and
   a name for each series
+- Use the _**describe**_ method to show details of a dataframe
+
+See the _**first_steps_with_tensor_flow**_ notebook for lesson and exercises
+
+2 types of data
+
+-----
 
 
 
