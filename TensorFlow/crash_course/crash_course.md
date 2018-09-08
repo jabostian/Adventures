@@ -110,6 +110,7 @@ TensorFlow consists of 2 components:
 tf.estimator is the high level API that the crash course is based on.
 tf.estimator is compatible with the Scikit-learn ML library.
 
+
 #### Programming exercises
 See the _**intro_to_pandas**_ notebook for lesson and exercises.
 
@@ -122,9 +123,105 @@ See the _**intro_to_pandas**_ notebook for lesson and exercises.
   a name for each series
 - Use the _**describe**_ method to show details of a dataframe
 
-See the _**first_steps_with_tensor_flow**_ notebook for lesson and exercises
+See the _**first_steps_with_tensor_flow**_ notebook for lesson and exercises.
 
-2 types of data
+2 types of data:
+- _**categorical**_ - textual data
+- _**numerical**_ - data that is a number
+
+Usually look at Root Mean Squared Error (RMSE) rather than Mean Squared Error
+(MSE), since RMSE can be judged on the same scale as the original targets.
+
+See the _**synthetic_features_and_outliers**_ notebook for lesson and exercises.
+
+Common Hyperparameters
+- _**steps**_ - total number of training iterations.  One step calculates the loss
+  from one batch and uses that value to modify the model's weights once.
+- _**batch size**_ - number of examples, chosen at random for a single step.
+
+Total number of trained examples == batch size * steps
+
+An _**epoch**_ is a full training run across the total number of trained examples.
+
+Convenience variable
+A _**period**_ is a grouping of training steps, used to observe model improvement
+during training.  This is a convenience variable to control the
+granularity of reporting.  This is not a hyperparameter.  It doesn't alter what
+the model learns.
+
+-----
+
+### Generalization
+_**Goal**_ - predict well on new data drawn from a hidden, true distribution
+_**Problem**_ - we don't see the truth, we only get to sample it
+
+I model h predicts well on our current samples, how can be sure that it will do
+well on new samples?
+
+_**Empirical**_ - evaluate the model against a new draw of test data
+
+Assumptions:
+- We draw samples _**independently and empirically (i.i.d)**_ at random from the
+  distribution.
+- The distribution is _**stationary**_ - doesn't change over time.
+- We always pull from the same distribution, including training, validation,
+  and test sets.
+
+Overfit models will have low loss, but don't generalize to new data well.
+
+Overtiffing is caused by making the model more complicated than necessary.
+- Fundamental tension of machine learning is balancing  the need to fit data
+  well, but as simply as possible.
+
+Ockam's razor applies here.
+- William of Ockam - 14th century friar and philosopher
+
+Separate data into training and test sets.  Keys:
+- Test set is large enough
+- Don't cheat by using the same test repeatedly
+
+-----
+
+### Training and Test Sets
+- When splitting training from test data, good idea to randomize first to avoid
+  getting clumps of data in one set or the other.
+- How big to make each set?
+   - Larger training set - better we can learn
+   - Larger test set - better confidence in the results
+- Don't ever train on test data - will give unrealistically good results
+   - If ever get 100% accuracy, check that you didn't accidentally train on the
+    wrong data set, or there are things like lots of duplicate data points
+    between the test and training sets.
+- Always want to make sure that yout _**test**_ set is:
+   - Large enough to yield statistically meaningful results
+   - Is representative of the test set as a whole.  Don't pick a test set with
+     different characteristics than the training set.
+
+-----
+
+### Validation
+If iterate through hyperparameter tuning in the training set to make the test
+set accuracy good, may be overfitting to peculiarities of the data.  May want to
+partition the original data set into 3 to include a new validation set.
+- Train on training data
+- Validate on validation data, keeping the final test data separate
+
+Pick a model/set of tuning parameters that works best on validation, confirm
+results on the test data.
+- If results between testing on validation and test data sets differ, then
+  probably were overfitting the validation set.
+
+Validation set is like a second test set.
+
+
+
+
+
+
+
+
+
+
 
 -----
 
