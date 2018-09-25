@@ -249,7 +249,7 @@ Good feature characteristics
 - Many ML models represent features as real-valued numbers, since they must
   be multiplied by model weights
 
-![Feature engineering](./crash_course/images/feature_engineering.png)
+![Feature engineering](./images/feature_engineering.png)
 
 - Integer and floating-point values can be copied over directly
 - Categorical features have a discrete set of possible values
