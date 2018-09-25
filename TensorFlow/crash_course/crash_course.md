@@ -213,18 +213,61 @@ results on the test data.
 
 Validation set is like a second test set.
 
+-----
 
+### Representation
+Date from the real world doesn't come to us as feature vectors we can use.
+Instead is database records, protocol buffers, etc.
 
+Need to create feature vectors from heterogeneous data sources
+- Feature engineering - engineers spend ~ 75% of their time on this
+- Can use one-hot encoding
+   - Unique coefficient for each string of input we see
+   - Binary 0/1 value for each unique example value (e.g. street address)
+      - This can be represented compactly
 
+Good feature characteristics
+- Should occur at least a handful of times in the feature set
+   - Features that only occur once, or **very** rarely should probably be
+     filtered out during data pre-processing
+- Should not take on magic values
+   - e.g. a feature for number of days a house is on the market should not have
+     a special value of **-1** to indicate that the house had never been on the
+     market.  Us a special boolean value to indicate this.
+- Feature values shouldn't change over time
+- Should not have crazy outlier values
+   - Cap or transform features to get rid of outliers
+- Binning trick -
+   - Use one-hot encoding to create bins of similar features
+   - Boolean value indicates membership in the bin
+- Good habits
+   - Visualize the data (explore)
+   - Make everything clean (remove outliers ...)
+   - Monitor data over time
 
+#### Mapping Raw Data to Features
+- Many ML models represent features as real-valued numbers, since they must
+  be multiplied by model weights
 
+![Feature engineering](./crash_course/images/feature_engineering.png)
 
-
-
+- Integer and floating-point values can be copied over directly
+- Categorical features have a discrete set of possible values
+   - Map values to integers
+      - Since multiplying by weights, a simple set of integers will imply an order
+        or magnitude to the values they represent (eg. street addresses)
+      - Some objects with the feature may have multiple values
+   - Create a binary vector for each categorical feature rather than an ordered
+     integer value
+      - For values that apply to the object, value is one
+      - Zero for objects where the value doesn't apply to the object
+   - Length of this vector == number of elements in the vocabulary
+      - If 10 values in the street category, 10-bit vector
+   - For categories with very large numbers of values, use a
+     _**sparse representation**_, where only non-zero values are stored
 
 
 -----
-
 
 
 
