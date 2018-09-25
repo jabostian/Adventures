@@ -38,25 +38,25 @@ Machine learning it's _**y = wx + b**_
 **Loss** is the error between prediction and actual
 
 <br>
-![Home prices](./crash_course/images/house_price.png)
+![Home prices](./images/house_price.png)
 
 Useful loss function is squared error:
 <br>
-![Squared error](./crash_course/images/squared_error.png)
+![Squared error](./images/squared_error.png)
 
 When training a model, want to minimize loss across all training examples:
 <br>
-![L2 loss](./crash_course/images/L2_loss.png)
+![L2 loss](./images/L2_loss.png)
 
 Goal is to minimize loss by finding the right set of weights and biases
 on average, across all examples:
 <br>
-![Model loss](./crash_course/images/model_loss.png)
+![Model loss](./images/model_loss.png)
 
 **Mean Squared Error (MSE)** id the average squared loss per example over the
 whole dataset.
 <br>
-![Mean Squared Error](./crash_course/images/MSE.png)
+![Mean Squared Error](./images/MSE.png)
 
 MSE is commonly used in ML, but it isn't the only practical, or even the best
 loss function in all cases.
@@ -74,14 +74,14 @@ Repeatedly take small steps in the direction that minimizes loss
 - Negative gradient steps
 - This strategy is **gradient descent**
 
-![Gradient Descent](./crash_course/images/gradient_descent.png)
+![Gradient Descent](./images/gradient_descent.png)
 
 **Learning rate** is a hyperparameter that determines how large of a step to
 take in the direction of the negative gradient to minimize loss.
 - This strategy is **gradient descent**
 
 <br>
-![Learning rate](./crash_course/images/learning_rate.png)
+![Learning rate](./images/learning_rate.png)
 
 If choose too large of a step, the model can diverge, and never minimize the
 loss function.  In this case, reduce the step size by a large value and re-try.
@@ -101,7 +101,7 @@ balances noise and efficiency of calculation.
 -----
 
 ### First Steps with TF
-![API Hierarchy](./crash_course/images/API_hierarchy.png)
+![API Hierarchy](./images/API_hierarchy.png)
 
 TensorFlow consists of 2 components:
 - A graph protocol buffer
@@ -114,7 +114,7 @@ tf.estimator is compatible with the Scikit-learn ML library.
 #### Programming exercises
 See the _**intro_to_pandas**_ notebook for lesson and exercises.
 
-[Intro to Pandas API](./crash_course/notebooks/intro_to_pandas.ipynb)<br>
+[Intro to Pandas API](./notebooks/intro_to_pandas.ipynb)<br>
 [Pandas documentation](http://pandas.pydata.org/pandas-docs/stable/index.html)
 
 - Pandas is a column-oriented data analysis API
